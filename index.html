@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>2025 MLB Home Run Leaders & Projections - Detroit Tigers (with Position & MLB Percentile)</title>
+<title>2025 MLB Home Run Leaders & Projections - Detroit Tigers</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
 body {
@@ -61,7 +61,7 @@ opacity: 1;
 <body>
 <div class="container">
 <h1 class="text-4xl font-bold text-gray-900">2025 MLB Home Run Leaders & Projections - Detroit Tigers</h1>
-<p class="text-lg text-gray-600 mb-2">Current home run totals and projected full-season totals (as of May 29, 2025)</p>
+<p id="reportDateText" class="text-lg text-gray-600 mb-2">Current home run totals and projected full-season totals</p>
 <p id="gameInfo" class="text-md text-gray-500 mb-6"></p>
 <div class="chart-container">
 <canvas id="homeRunChart"></canvas>
@@ -83,289 +83,260 @@ Batting order information is not available in the current data.
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-// Data for the Detroit Tigers home run hitters in the 2025 season (as of May 29, 2025)
-// Source: FOX Sports, StatMuse, and Yahoo Sports MLB stats (current as of search date)
-const allHrData = [
-{ name: "Spencer Torkelson", team: "DET", currentHr: 13, gamesPlayed: 55, position: "1B" },
-{ name: "Riley Greene", team: "DET", currentHr: 12, gamesPlayed: 55, position: "LF" },
-{ name: "Kerry Carpenter", team: "DET", currentHr: 10, gamesPlayed: 53, position: "RF" },
-{ name: "Javier Báez", team: "DET", currentHr: 6, gamesPlayed: 47, position: "CF" },
-{ name: "Gleyber Torres", team: "DET", currentHr: 5, gamesPlayed: 44, position: "2B" },
-{ name: "Dillon Dingler", team: "DET", currentHr: 4, gamesPlayed: 41, position: "C" },
-{ name: "Colt Keith", team: "DET", currentHr: 4, gamesPlayed: 50, position: "2B" },
-{ name: "Trey Sweeney", team: "DET", currentHr: 4, gamesPlayed: 55, position: "SS" },
-{ name: "Zach McKinstry", team: "DET", currentHr: 3, gamesPlayed: 51, position: "RF" },
-{ name: "Andy Ibáñez", team: "DET", currentHr: 2, gamesPlayed: 40, position: "3B" },
-{ name: "Justyn-Henry Malloy", team: "DET", currentHr: 1, gamesPlayed: 44, position: "RF" },
-{ name: "Wenceel Pérez", team: "DET", currentHr: 1, gamesPlayed: 2, position: "CF" }
-];
+async function loadDataAndSetupChart() {
+  try {
+    const currentDateString = "May 29, 2025";
+    document.title = `2025 MLB Home Run Leaders & Projections - Detroit Tigers (as of ${currentDateString})`;
+    document.getElementById('reportDateText').textContent = `Current home run totals and projected full-season totals (as of ${currentDateString})`;
 
-// Overall MLB Home Run Leaders (as of May 29, 2025) - This data is manually compiled from search results.
-// In a real-world application, this would come from a live API.
-const mlbHrLeaders = [
-{ name: "Shohei Ohtani", hr: 20 },
-{ name: "Cal Raleigh", hr: 19 },
-{ name: "Aaron Judge", hr: 18 },
-{ name: "Kyle Schwarber", hr: 18 },
-{ name: "Corbin Carroll", hr: 16 },
-{ name: "Eugenio Suárez", hr: 15 },
-{ name: "Taylor Ward", hr: 15 },
-{ name: "Pete Crow-Armstrong", hr: 14 },
-{ name: "Logan O'Hoppe", hr: 14 },
-{ name: "Seiya Suzuki", hr: 14 },
-{ name: "James Wood", hr: 14 },
-{ name: "Fernando Tatis Jr.", hr: 13 },
-{ name: "Spencer Torkelson", hr: 13 }, // DET
-{ name: "Wilyer Abreu", hr: 12 },
-{ name: "Rafael Devers", hr: 12 },
-{ name: "Riley Greene", hr: 12 }, // DET
-{ name: "Trent Grisham", hr: 12 },
-{ name: "Matt Olson", hr: 12 },
-{ name: "Brent Rooker", hr: 12 },
-{ name: "Kyle Tucker", hr: 12 },
-{ name: "Pete Alonso", hr: 11 },
-{ name: "Alex Bregman", hr: 11 },
-{ name: "Oneil Cruz", hr: 11 },
-{ name: "Elly De La Cruz", hr: 11 },
-{ name: "Isaac Paredes", hr: 11 },
-{ name: "Kyle Manzardo", hr: 10 },
-{ name: "Francisco Lindor", hr: 10 },
-{ name: "Junior Caminero", hr: 10 },
-{ name: "Byron Buxton", hr: 10 },
-{ name: "Kerry Carpenter", hr: 10 }, // DET
-{ name: "Teoscar Hernandez", hr: 10 },
-{ name: "Wyatt Langford", hr: 10 },
-{ name: "Jorge Polanco", hr: 10 },
-{ name: "Tyler Soderstrom", hr: 10 },
-{ name: "Julio Rodriguez", hr: 10 },
-{ name: "Wilmer Flores", hr: 10 },
-{ name: "Heliot Ramos", hr: 10 },
-{ name: "Kyle Stowers", hr: 10 },
-{ name: "Cedric Mullins", hr: 10 },
-{ name: "Christian Yelich", hr: 10 },
-{ name: "Shea Langeliers", hr: 9 },
-{ name: "Carson Kelly", hr: 9 },
-{ name: "Mike Trout", hr: 9 },
-{ name: "Andy Pages", hr: 9 },
-{ name: "Marcell Ozuna", hr: 9 },
-{ name: "Matt Chapman", hr: 9 },
-{ name: "Zach Neto", hr: 9 },
-{ name: "Jose Ramirez", hr: 9 },
-{ name: "Freddie Freeman", hr: 9 },
-{ name: "Ryan O'Hearn", hr: 9 },
-{ name: "Javier Báez", hr: 6 }, // DET
-{ name: "Gleyber Torres", hr: 5 }, // DET
-{ name: "Dillon Dingler", hr: 4 }, // DET
-{ name: "Colt Keith", hr: 4 }, // DET
-{ name: "Trey Sweeney", hr: 4 }, // DET
-{ name: "Zach McKinstry", hr: 3 }, // DET
-{ name: "Andy Ibáñez", hr: 2 }, // DET
-{ name: "Justyn-Henry Malloy", hr: 1 }, // DET
-{ name: "Wenceel Pérez", hr: 1 } // DET
-];
+    // Fetch data from JSON files
+    const [allHrResponse, mlbLeadersResponse] = await Promise.all([
+      fetch('detroit_tigers_data.json'),
+      fetch('mlb_leaders_data.json')
+    ]);
 
-// Sort MLB HR leaders by HR in ascending order for percentile calculation
-// Create a deep copy to avoid modifying the original array for other potential uses
-const mlbHrLeadersSorted = [...mlbHrLeaders].sort((a, b) => a.hr - b.hr);
-const N = mlbHrLeadersSorted.length;
+    if (!allHrResponse.ok) {
+      throw new Error(`HTTP error! status: ${allHrResponse.status} for detroit_tigers_data.json`);
+    }
+    if (!mlbLeadersResponse.ok) {
+      throw new Error(`HTTP error! status: ${mlbLeadersResponse.status} for mlb_leaders_data.json`);
+    }
 
-const totalSeasonGames = 162;
-const minGamesForProjection = 10; // Minimum games played for a rate-based projection
-const midSeasonGames = totalSeasonGames / 2; // Halfway point of the season
+    const allHrData = await allHrResponse.json();
+    const mlbHrLeaders = await mlbLeadersResponse.json();
 
-// Determine the maximum games played by any Tigers player to set the "current season" benchmark
-const maxGamesPlayedByTigers = Math.max(...allHrData.map(player => player.gamesPlayed));
-const minGamesForCurrent70Percent = Math.ceil(maxGamesPlayedByTigers * 0.70); // 70% of games played by team leader
+    // Data for the Detroit Tigers home run hitters in the 2025 season (as of May 29, 2025)
+    // Source: FOX Sports, StatMuse, and Yahoo Sports MLB stats (current as of search date)
+    // Overall MLB Home Run Leaders (as of May 29, 2025) - This data is manually compiled from search results.
+    // In a real-world application, this would come from a live API.
 
-// Calculate games remaining
-const gamesRemaining = totalSeasonGames - maxGamesPlayedByTigers;
+    // Sort MLB HR leaders by HR in ascending order for percentile calculation
+    // Create a deep copy to avoid modifying the original array for other potential uses
+    const mlbHrLeadersSorted = [...mlbHrLeaders].sort((a, b) => a.hr - b.hr);
+    const N = mlbHrLeadersSorted.length;
 
-// Update the game info paragraph
-document.getElementById('gameInfo').textContent = `Games played so far: ${maxGamesPlayedByTigers} | Games remaining in season: ${gamesRemaining}`;
+    const totalSeasonGames = 162;
+    const minGamesForProjection = 10; // Minimum games played for a rate-based projection
+    const midSeasonGames = totalSeasonGames / 2; // Halfway point of the season
+
+    // Determine the maximum games played by any Tigers player to set the "current season" benchmark
+    // Ensure allHrData is not empty before trying to calculate maxGamesPlayedByTigers
+    if (allHrData.length === 0) {
+      console.warn("Detroit Tigers data is empty. Cannot calculate max games played or proceed with chart generation for Tigers.");
+      // Display a message to the user or handle this scenario appropriately
+      document.getElementById('gameInfo').textContent = "No data available for Detroit Tigers.";
+      document.getElementById('playerList').innerHTML = '<li>No Tigers player data loaded.</li>';
+      // Potentially, you might want to still render the MLB leaders chart if that's separate
+      // For now, we'll stop further processing related to Tigers data.
+      return; 
+    }
+    const maxGamesPlayedByTigers = Math.max(...allHrData.map(player => player.gamesPlayed));
+    const minGamesForCurrent70Percent = Math.ceil(maxGamesPlayedByTigers * 0.70); // 70% of games played by team leader
+
+    // Calculate games remaining
+    const gamesRemaining = totalSeasonGames - maxGamesPlayedByTigers;
+
+    // Update the game info paragraph
+    document.getElementById('gameInfo').textContent = `Games played so far: ${maxGamesPlayedByTigers} | Games remaining in season: ${gamesRemaining}`;
 
 
-// Filter data to only include Detroit Tigers players who have played at least 70% of the current season's games
-const hrData = allHrData.filter(player => player.gamesPlayed >= minGamesForCurrent70Percent);
+    // Filter data to only include Detroit Tigers players who have played at least 70% of the current season's games
+    const hrData = allHrData.filter(player => player.gamesPlayed >= minGamesForCurrent70Percent);
 
-// Add MLB percentile to each filtered Tigers player
-hrData.forEach(tigersPlayer => {
-let L = 0; // count of players with HR < tigersPlayer.currentHr
-let E = 0; // count of players with HR === tigersPlayer.currentHr
+    // Add MLB percentile to each filtered Tigers player
+    hrData.forEach(tigersPlayer => {
+    let L = 0; // count of players with HR < tigersPlayer.currentHr
+    let E = 0; // count of players with HR === tigersPlayer.currentHr
 
-mlbHrLeadersSorted.forEach(mlbPlayer => {
-if (mlbPlayer.hr < tigersPlayer.currentHr) {
-L++;
-} else if (mlbPlayer.hr === tigersPlayer.currentHr) {
-E++;
-}
-});
-tigersPlayer.mlbPercentile = ((L + 0.5 * E) / N * 100).toFixed(1);
-});
+    mlbHrLeadersSorted.forEach(mlbPlayer => {
+    if (mlbPlayer.hr < tigersPlayer.currentHr) {
+    L++;
+    } else if (mlbPlayer.hr === tigersPlayer.currentHr) {
+    E++;
+    }
+    });
+    tigersPlayer.mlbPercentile = ((L + 0.5 * E) / N * 100).toFixed(1);
+    });
 
-// Calculate projected home runs for each player based on their individual games played
-hrData.forEach(player => {
-if (player.gamesPlayed >= minGamesForProjection) {
-player.projectedHr = Math.round((player.currentHr / player.gamesPlayed) * totalSeasonGames);
-player.midSeasonProjectedHr = Math.round((player.currentHr / player.gamesPlayed) * midSeasonGames);
-} else {
-// For players with very few games, set projected HR to current HR
-// and add a flag to indicate unreliable projection
-player.projectedHr = player.currentHr;
-player.midSeasonProjectedHr = player.currentHr; // Mid-season also capped at current for unreliable
-player.unreliableProjection = true;
-}
-});
+    // Calculate projected home runs for each player based on their individual games played
+    hrData.forEach(player => {
+    if (player.gamesPlayed >= minGamesForProjection) {
+    player.projectedHr = Math.round((player.currentHr / player.gamesPlayed) * totalSeasonGames);
+    player.midSeasonProjectedHr = Math.round((player.currentHr / player.gamesPlayed) * midSeasonGames);
+    } else {
+    // For players with very few games, set projected HR to current HR
+    // and add a flag to indicate unreliable projection
+    player.projectedHr = player.currentHr;
+    player.midSeasonProjectedHr = player.currentHr; // Mid-season also capped at current for unreliable
+    player.unreliableProjection = true;
+    }
+    });
 
-// Sort data by projected total home runs in descending order for better visual grouping
-hrData.sort((a, b) => b.projectedHr - a.projectedHr);
+    // Sort data by projected total home runs in descending order for better visual grouping
+    hrData.sort((a, b) => b.projectedHr - a.projectedHr);
 
-// Prepare labels and data for the chart
-// Changed label formatting to put percentile on a new line
-const labels = hrData.map(player => `${player.name} (${player.position})\n(MLB HR Percentile: ${player.mlbPercentile}%)`);
-const currentHomeRuns = hrData.map(player => player.currentHr);
-const additionalProjectedHomeRuns = hrData.map(player => Math.max(0, player.projectedHr - player.currentHr)); // Ensure non-negative
+    // Prepare labels and data for the chart
+    // Changed label formatting to put percentile on a new line
+    const labels = hrData.map(player => `${player.name} (${player.position})\n(MLB HR Percentile: ${player.mlbPercentile}%)`);
+    const currentHomeRuns = hrData.map(player => player.currentHr);
+    const additionalProjectedHomeRuns = hrData.map(player => Math.max(0, player.projectedHr - player.currentHr)); // Ensure non-negative
 
-// Prepare data for the mid-season markers
-const midSeasonMarkers = hrData.map((player, index) => ({
-x: player.midSeasonProjectedHr,
-y: index // Y-axis index for the player
-}));
+    // Prepare data for the mid-season markers
+    const midSeasonMarkers = hrData.map((player, index) => ({
+    x: player.midSeasonProjectedHr,
+    y: index // Y-axis index for the player
+    }));
 
-// Get the canvas element
-const ctx = document.getElementById('homeRunChart').getContext('2d');
+    // Get the canvas element
+    const ctx = document.getElementById('homeRunChart').getContext('2d');
 
-// Destroy existing chart instance if it exists to prevent conflicts
-if (window.homeRunChartInstance) {
-window.homeRunChartInstance.destroy();
+    // Destroy existing chart instance if it exists to prevent conflicts
+    if (window.homeRunChartInstance) {
+    window.homeRunChartInstance.destroy();
+    }
+
+    // Create the bar chart
+    window.homeRunChartInstance = new Chart(ctx, {
+    type: 'bar',
+    data: {
+    labels: labels,
+    datasets: [
+    {
+    label: 'Current Home Runs',
+    data: currentHomeRuns,
+    backgroundColor: 'rgba(76, 175, 80, 0.8)', // Green for current
+    borderColor: 'rgba(76, 175, 80, 1)',
+    borderWidth: 1,
+    borderRadius: 8,
+    },
+    {
+    label: 'Additional Projected Home Runs',
+    data: additionalProjectedHomeRuns,
+    backgroundColor: 'rgba(255, 235, 59, 0.8)', // Yellow for projected addition
+    borderColor: 'rgba(255, 235, 59, 1)',
+    borderWidth: 1,
+    borderRadius: 8,
+    },
+    {
+    label: 'Mid-Season Projection',
+    data: midSeasonMarkers,
+    type: 'scatter', // Overlay as a scatter plot
+    backgroundColor: 'black',
+    borderColor: 'black',
+    pointStyle: 'line', // Make it a line/tick
+    radius: 8, // Length of the line
+    borderWidth: 2, // Thickness of the line
+    rotation: 90, // Rotate to make it vertical
+    showLine: false, // Do not connect points with a line
+    tooltip: {
+    callbacks: {
+    label: function(context) {
+    return `Mid-Season Projected: ${context.raw.x} HR`;
+    }
+    }
+    }
+    }
+    ]
+    },
+    options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    indexAxis: 'y', // Make it a horizontal bar chart
+    plugins: {
+    legend: {
+    display: true, // Show legend for current vs. projected
+    position: 'top',
+    labels: {
+    color: '#4a5568'
+    }
+    },
+    tooltip: {
+    callbacks: {
+    title: function(context) {
+    // For stacked bars, context[0].label might contain both lines.
+    // We want just the name and position for the tooltip title.
+    const fullLabel = context[0].label;
+    return fullLabel.split('\n')[0]; // Get only the first line
+    },
+    label: function(context) {
+    let label = context.dataset.label || '';
+    if (label === 'Current Home Runs') {
+    return `Current: ${context.raw} HR`;
+    } else if (label === 'Additional Projected Home Runs') {
+    const playerIndex = context.dataIndex;
+    const current = currentHomeRuns[playerIndex];
+    const projected = current + context.raw;
+    return `Projected Total: ${projected} HR (Additional: ${context.raw})`;
+    }
+    return '';
+    }
+    }
+    }
+    },
+    scales: {
+    x: {
+    beginAtZero: true,
+    stacked: true, // Crucial for stacking bars
+    title: {
+    display: true,
+    text: 'Home Runs',
+    color: '#4a5568'
+    },
+    ticks: {
+    color: '#4a5568'
+    },
+    grid: {
+    color: 'rgba(203, 213, 224, 0.5)'
+    }
+    },
+    y: {
+    stacked: true, // Crucial for stacking bars
+    title: {
+    display: true,
+    text: 'Player',
+    color: '#4a5568'
+    },
+    ticks: {
+    color: '#4a5568'
+    },
+    grid: {
+    color: 'rgba(203, 213, 224, 0.5)'
+    }
+    }
+    }
+    }
+    });
+
+    // Populate the player list below the chart
+    const playerList = document.getElementById('playerList');
+    playerList.innerHTML = ''; // Clear previous list items
+    if (hrData.length === 0) {
+    const noDataMessage = document.createElement('li');
+    noDataMessage.textContent = "No Detroit Tigers players found who have played in at least 70% of the team's games to date.";
+    playerList.appendChild(noDataMessage);
+    } else {
+    hrData.forEach(player => {
+    const listItem = document.createElement('li');
+    listItem.textContent = `${player.name} (${player.position})\n(MLB HR Percentile: ${player.mlbPercentile}%): Current HR: ${player.currentHr}, Projected Season HR: ${player.projectedHr}, Mid-Season Projected HR: ${player.midSeasonProjectedHr}` +
+    (player.unreliableProjection ? ' (Projection based on limited games played)' : '');
+    playerList.appendChild(listItem);
+    });
+    }
+  } catch (error) {
+    console.error("Failed to load data or initialize chart:", error);
+    // Optionally, display an error message to the user in the UI
+    document.getElementById('gameInfo').textContent = "Error loading chart data. Please try again later.";
+    const playerList = document.getElementById('playerList');
+    playerList.innerHTML = '';
+    const errorItem = document.createElement('li');
+    errorItem.textContent = "Could not load player data.";
+    errorItem.style.color = 'red';
+    playerList.appendChild(errorItem);
+  }
 }
 
-// Create the bar chart
-window.homeRunChartInstance = new Chart(ctx, {
-type: 'bar',
-data: {
-labels: labels,
-datasets: [
-{
-label: 'Current Home Runs',
-data: currentHomeRuns,
-backgroundColor: 'rgba(76, 175, 80, 0.8)', // Green for current
-borderColor: 'rgba(76, 175, 80, 1)',
-borderWidth: 1,
-borderRadius: 8,
-},
-{
-label: 'Additional Projected Home Runs',
-data: additionalProjectedHomeRuns,
-backgroundColor: 'rgba(255, 235, 59, 0.8)', // Yellow for projected addition
-borderColor: 'rgba(255, 235, 59, 1)',
-borderWidth: 1,
-borderRadius: 8,
-},
-{
-label: 'Mid-Season Projection',
-data: midSeasonMarkers,
-type: 'scatter', // Overlay as a scatter plot
-backgroundColor: 'black',
-borderColor: 'black',
-pointStyle: 'line', // Make it a line/tick
-radius: 8, // Length of the line
-borderWidth: 2, // Thickness of the line
-rotation: 90, // Rotate to make it vertical
-showLine: false, // Do not connect points with a line
-tooltip: {
-callbacks: {
-label: function(context) {
-return `Mid-Season Projected: ${context.raw.x} HR`;
-}
-}
-}
-}
-]
-},
-options: {
-responsive: true,
-maintainAspectRatio: false,
-indexAxis: 'y', // Make it a horizontal bar chart
-plugins: {
-legend: {
-display: true, // Show legend for current vs. projected
-position: 'top',
-labels: {
-color: '#4a5568'
-}
-},
-tooltip: {
-callbacks: {
-title: function(context) {
-// For stacked bars, context[0].label might contain both lines.
-// We want just the name and position for the tooltip title.
-const fullLabel = context[0].label;
-return fullLabel.split('\n')[0]; // Get only the first line
-},
-label: function(context) {
-let label = context.dataset.label || '';
-if (label === 'Current Home Runs') {
-return `Current: ${context.raw} HR`;
-} else if (label === 'Additional Projected Home Runs') {
-const playerIndex = context.dataIndex;
-const current = currentHomeRuns[playerIndex];
-const projected = current + context.raw;
-return `Projected Total: ${projected} HR (Additional: ${context.raw})`;
-}
-return '';
-}
-}
-}
-},
-scales: {
-x: {
-beginAtZero: true,
-stacked: true, // Crucial for stacking bars
-title: {
-display: true,
-text: 'Home Runs',
-color: '#4a5568'
-},
-ticks: {
-color: '#4a5568'
-},
-grid: {
-color: 'rgba(203, 213, 224, 0.5)'
-}
-},
-y: {
-stacked: true, // Crucial for stacking bars
-title: {
-display: true,
-text: 'Player',
-color: '#4a5568'
-},
-ticks: {
-color: '#4a5568'
-},
-grid: {
-color: 'rgba(203, 213, 224, 0.5)'
-}
-}
-}
-}
-});
-
-// Populate the player list below the chart
-const playerList = document.getElementById('playerList');
-playerList.innerHTML = ''; // Clear previous list items
-if (hrData.length === 0) {
-const noDataMessage = document.createElement('li');
-noDataMessage.textContent = "No Detroit Tigers players found who have played in at least 70% of the team's games to date.";
-playerList.appendChild(noDataMessage);
-} else {
-hrData.forEach(player => {
-const listItem = document.createElement('li');
-listItem.textContent = `${player.name} (${player.position})\n(MLB HR Percentile: ${player.mlbPercentile}%): Current HR: ${player.currentHr}, Projected Season HR: ${player.projectedHr}, Mid-Season Projected HR: ${player.midSeasonProjectedHr}` +
-(player.unreliableProjection ? ' (Projection based on limited games played)' : '');
-playerList.appendChild(listItem);
-});
-}
+// Call the async function to start loading data and setting up the chart
+loadDataAndSetupChart();
 </script>
 </body>
 </html>

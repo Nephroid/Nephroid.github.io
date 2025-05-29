@@ -1,0 +1,14 @@
+[
+{ "name": "Spencer Torkelson", "team": "DET", "currentHr": 13, "gamesPlayed": 55, "position": "1B" },
+{ "name": "Riley Greene", "team": "DET", "currentHr": 12, "gamesPlayed": 55, "position": "LF" },
+{ "name": "Kerry Carpenter", "team": "DET", "currentHr": 10, "gamesPlayed": 53, "position": "RF" },
+{ "name": "Javier Báez", "team": "DET", "currentHr": 6, "gamesPlayed": 47, "position": "CF" },
+{ "name": "Gleyber Torres", "team": "DET", "currentHr": 5, "gamesPlayed": 44, "position": "2B" },
+{ "name": "Dillon Dingler", "team": "DET", "currentHr": 4, "gamesPlayed": 41, "position": "C" },
+{ "name": "Colt Keith", "team": "DET", "currentHr": 4, "gamesPlayed": 50, "position": "2B" },
+{ "name": "Trey Sweeney", "team": "DET", "currentHr": 4, "gamesPlayed": 55, "position": "SS" },
+{ "name": "Zach McKinstry", "team": "DET", "currentHr": 3, "gamesPlayed": 51, "position": "RF" },
+{ "name": "Andy Ibáñez", "team": "DET", "currentHr": 2, "gamesPlayed": 40, "position": "3B" },
+{ "name": "Justyn-Henry Malloy", "team": "DET", "currentHr": 1, "gamesPlayed": 44, "position": "RF" },
+{ "name": "Wenceel Pérez", "team": "DET", "currentHr": 1, "gamesPlayed": 2, "position": "CF" }
+]
