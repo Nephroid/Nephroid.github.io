@@ -61,7 +61,7 @@ opacity: 1;
 <body>
 <div class="container">
 <h1 class="text-4xl font-bold text-gray-900">2025 MLB Home Run Leaders & Projections - Detroit Tigers</h1>
-<p class="text-lg text-gray-600 mb-2">Current home run totals and projected full-season totals (as of May 29, 2025)</p>
+<p class="text-lg text-gray-600 mb-2">Current home run totals and projected full-season totals (as of May 30, 2025)</p>
 <p id="gameInfo" class="text-md text-gray-500 mb-6"></p>
 <div class="chart-container">
 <canvas id="homeRunChart"></canvas>
@@ -83,7 +83,7 @@ Batting order information is not available in the current data.
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-// Data for the Detroit Tigers home run hitters in the 2025 season (as of May 29, 2025)
+// Data for the Detroit Tigers home run hitters in the 2025 season (as of May 30, 2025)
 // Source: FOX Sports, StatMuse, and Yahoo Sports MLB stats (current as of search date)
 const allHrData = [
 { name: "Spencer Torkelson", team: "DET", currentHr: 13, gamesPlayed: 55, position: "1B" },
@@ -100,68 +100,22 @@ const allHrData = [
 { name: "Wenceel Pérez", team: "DET", currentHr: 1, gamesPlayed: 2, position: "CF" }
 ];
 
-// Overall MLB Home Run Leaders (as of May 29, 2025) - This data is manually compiled from search results.
+// Overall MLB Home Run Leaders (as of May 30, 2025) - This data is manually compiled from search results.
 // In a real-world application, this would come from a live API.
 const mlbHrLeaders = [
-{ name: "Shohei Ohtani", hr: 20 },
-{ name: "Cal Raleigh", hr: 19 },
-{ name: "Aaron Judge", hr: 18 },
-{ name: "Kyle Schwarber", hr: 18 },
-{ name: "Corbin Carroll", hr: 16 },
-{ name: "Eugenio Suárez", hr: 15 },
-{ name: "Taylor Ward", hr: 15 },
-{ name: "Pete Crow-Armstrong", hr: 14 },
-{ name: "Logan O'Hoppe", hr: 14 },
-{ name: "Seiya Suzuki", hr: 14 },
-{ name: "James Wood", hr: 14 },
-{ name: "Fernando Tatis Jr.", hr: 13 },
-{ name: "Spencer Torkelson", hr: 13 }, // DET
-{ name: "Wilyer Abreu", hr: 12 },
-{ name: "Rafael Devers", hr: 12 },
-{ name: "Riley Greene", hr: 12 }, // DET
-{ name: "Trent Grisham", hr: 12 },
-{ name: "Matt Olson", hr: 12 },
-{ name: "Brent Rooker", hr: 12 },
-{ name: "Kyle Tucker", hr: 12 },
-{ name: "Pete Alonso", hr: 11 },
-{ name: "Alex Bregman", hr: 11 },
-{ name: "Oneil Cruz", hr: 11 },
-{ name: "Elly De La Cruz", hr: 11 },
-{ name: "Isaac Paredes", hr: 11 },
-{ name: "Kyle Manzardo", hr: 10 },
-{ name: "Francisco Lindor", hr: 10 },
-{ name: "Junior Caminero", hr: 10 },
-{ name: "Byron Buxton", hr: 10 },
-{ name: "Kerry Carpenter", hr: 10 }, // DET
-{ name: "Teoscar Hernandez", hr: 10 },
-{ name: "Wyatt Langford", hr: 10 },
-{ name: "Jorge Polanco", hr: 10 },
-{ name: "Tyler Soderstrom", hr: 10 },
-{ name: "Julio Rodriguez", hr: 10 },
-{ name: "Wilmer Flores", hr: 10 },
-{ name: "Heliot Ramos", hr: 10 },
-{ name: "Kyle Stowers", hr: 10 },
-{ name: "Cedric Mullins", hr: 10 },
-{ name: "Christian Yelich", hr: 10 },
-{ name: "Shea Langeliers", hr: 9 },
-{ name: "Carson Kelly", hr: 9 },
-{ name: "Mike Trout", hr: 9 },
-{ name: "Andy Pages", hr: 9 },
-{ name: "Marcell Ozuna", hr: 9 },
-{ name: "Matt Chapman", hr: 9 },
-{ name: "Zach Neto", hr: 9 },
-{ name: "Jose Ramirez", hr: 9 },
-{ name: "Freddie Freeman", hr: 9 },
-{ name: "Ryan O'Hearn", hr: 9 },
-{ name: "Javier Báez", hr: 6 }, // DET
-{ name: "Gleyber Torres", hr: 5 }, // DET
-{ name: "Dillon Dingler", hr: 4 }, // DET
-{ name: "Colt Keith", hr: 4 }, // DET
-{ name: "Trey Sweeney", hr: 4 }, // DET
-{ name: "Zach McKinstry", hr: 3 }, // DET
-{ name: "Andy Ibáñez", hr: 2 }, // DET
-{ name: "Justyn-Henry Malloy", hr: 1 }, // DET
-{ name: "Wenceel Pérez", hr: 1 } // DET
+  { name: "Shohei Ohtani", hr: 20 },
+  { name: "Cal Raleigh", hr: 19 },
+  { name: "Kyle Schwarber", hr: 19 },
+  { name: "Aaron Judge", hr: 18 },
+  { name: "Corbin Carroll", hr: 16 },
+  { name: "Pete Crow-Armstrong", hr: 15 },
+  { name: "Eugenio Suárez", hr: 15 },
+  { name: "Taylor Ward", hr: 15 },
+  { name: "James Wood", hr: 15 },
+  { name: "Logan O'Hoppe", hr: 14 },
+  { name: "Seiya Suzuki", hr: 14 },
+  { name: "Spencer Torkelson", hr: 13 }, // DET
+  { name: "Riley Greene", hr: 12 } // DET
 ];
 
 // Sort MLB HR leaders by HR in ascending order for percentile calculation
