@@ -118,11 +118,6 @@ const mlbHrLeaders = [
   { name: "Riley Greene", hr: 12 } // DET
 ];
 
-// Sort MLB HR leaders by HR in ascending order for percentile calculation
-// Create a deep copy to avoid modifying the original array for other potential uses
-const mlbHrLeadersSorted = [...mlbHrLeaders].sort((a, b) => a.hr - b.hr);
-const N = mlbHrLeadersSorted.length;
-
 const totalSeasonGames = 162;
 const minGamesForProjection = 10; // Minimum games played for a rate-based projection
 const midSeasonGames = totalSeasonGames / 2; // Halfway point of the season
@@ -140,21 +135,6 @@ document.getElementById('gameInfo').textContent = `Games played so far: ${maxGam
 
 // Filter data to only include Detroit Tigers players who have played at least 70% of the current season's games
 const hrData = allHrData.filter(player => player.gamesPlayed >= minGamesForCurrent70Percent);
-
-// Add MLB percentile to each filtered Tigers player
-hrData.forEach(tigersPlayer => {
-let L = 0; // count of players with HR < tigersPlayer.currentHr
-let E = 0; // count of players with HR === tigersPlayer.currentHr
-
-mlbHrLeadersSorted.forEach(mlbPlayer => {
-if (mlbPlayer.hr < tigersPlayer.currentHr) {
-L++;
-} else if (mlbPlayer.hr === tigersPlayer.currentHr) {
-E++;
-}
-});
-tigersPlayer.mlbPercentile = ((L + 0.5 * E) / N * 100).toFixed(1);
-});
 
 // Calculate projected home runs for each player based on their individual games played
 hrData.forEach(player => {
@@ -175,7 +155,7 @@ hrData.sort((a, b) => b.projectedHr - a.projectedHr);
 
 // Prepare labels and data for the chart
 // Changed label formatting to put percentile on a new line
-const labels = hrData.map(player => `${player.name} (${player.position})\n(MLB HR Percentile: ${player.mlbPercentile}%)`);
+const labels = hrData.map(player => `${player.name} (${player.position})`);
 const currentHomeRuns = hrData.map(player => player.currentHr);
 const additionalProjectedHomeRuns = hrData.map(player => Math.max(0, player.projectedHr - player.currentHr)); // Ensure non-negative
 
@@ -315,7 +295,7 @@ playerList.appendChild(noDataMessage);
 } else {
 hrData.forEach(player => {
 const listItem = document.createElement('li');
-listItem.textContent = `${player.name} (${player.position})\n(MLB HR Percentile: ${player.mlbPercentile}%): Current HR: ${player.currentHr}, Projected Season HR: ${player.projectedHr}, Mid-Season Projected HR: ${player.midSeasonProjectedHr}` +
+listItem.textContent = `${player.name} (${player.position}): Current HR: ${player.currentHr}, Projected Season HR: ${player.projectedHr}, Mid-Season Projected HR: ${player.midSeasonProjectedHr}` +
 (player.unreliableProjection ? ' (Projection based on limited games played)' : '');
 playerList.appendChild(listItem);
 });
