@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meds and Feds - Welcome</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+body {
+font-family: 'Inter', sans-serif;
+}
+/* Additional styles for active tab and general enhancements */
+.tab-active {
+border-bottom-color: #3b82f6; /* blue-500 */
+color: #3b82f6; /* blue-500 */
+font-weight: 600;
+}
+.tab-inactive {
+border-bottom-color: transparent;
+color: #6b7280; /* gray-500 */
+}
+.tab-inactive:hover {
+border-bottom-color: #d1d5db; /* gray-300 */
+color: #1f2937; /* gray-800 */
+}
+</style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+<header class="bg-white shadow-md">
+<div class="container mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex items-center justify-between h-20">
+<h1 class="text-3xl font-bold text-blue-600">Meds and Feds</h1>
+<div>
+</div>
+</div>
+</div>
+</header>
+
+<nav class="bg-white shadow-sm">
+<div class="container mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex border-b border-gray-200">
+<button id="tab-welcome" class="tab-active py-4 px-6 text-sm font-medium border-b-2 focus:outline-none">
+Welcome
+</button>
+<button id="tab-information" class="tab-inactive py-4 px-6 text-sm font-medium border-b-2 focus:outline-none">
+Information
+</button>
+<button id="tab-resources" class="tab-inactive py-4 px-6 text-sm font-medium border-b-2 focus:outline-none">
+Resources
+</button>
+<button id="tab-sports" class="tab-inactive py-4 px-6 text-sm font-medium border-b-2 focus:outline-none">
+Sports
+</button>
+<button id="tab-contact" class="tab-inactive py-4 px-6 text-sm font-medium border-b-2 focus:outline-none">
+Contact
+</button>
+</div>
+</div>
+</nav>
+
+<main class="container mx-auto p-4 sm:p-6 lg:p-8">
+<div id="content-welcome" class="bg-white p-6 sm:p-8 rounded-lg shadow">
+<h2 class="text-2xl font-semibold text-gray-700 mb-4">Welcome to Meds and Feds!</h2>
+<p class="text-gray-600 mb-4">
+This is your central hub for information and resources. We are glad to have you here.
+Navigate through the tabs above to explore different sections.
+</p>
+<p class="text-gray-600">
+Whether you're looking for specific medical guidelines, federal regulations, or helpful resources,
+we aim to provide a comprehensive and easy-to-navigate platform.
+</p>
+<div class="mt-6">
+<a href="#" class="inline-block bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-150 ease-in-out">
+Get Started
+</a>
+</div>
+</div>
+
+<div id="content-information" class="hidden bg-white p-6 sm:p-8 rounded-lg shadow">
+<h2 class="text-2xl font-semibold text-gray-700 mb-4">Information Section</h2>
+<p class="text-gray-600 mb-4">
+Detailed information regarding various topics will be presented here.
+This section can be populated with articles, data, and relevant facts.
+</p>
+</div>
+
+<div id="content-resources" class="hidden bg-white p-6 sm:p-8 rounded-lg shadow">
+<h2 class="text-2xl font-semibold text-gray-700 mb-4">Resources Section</h2>
+<p class="text-gray-600 mb-4">
+Find helpful links, documents, and tools in this section.
+</p>
+<ul class="list-disc list-inside text-gray-600">
+<li>Resource Link 1</li>
+<li>Document Download A</li>
+<li>Useful Tool B</li>
+</ul>
+</div>
+
+<div id="content-sports" class="hidden bg-white p-6 sm:p-8 rounded-lg shadow">
+<h2 class="text-2xl font-semibold text-gray-700 mb-4">Sports Section</h2>
+<p class="text-gray-600 mb-4">
+Welcome to the Sports section! Here you'll find the latest updates, scores, and news
+from the world of sports.
+</p>
+<p class="text-gray-600">
+Content for this section is coming soon.
+</p>
+</div>
+
+<div id="content-contact" class="hidden bg-white p-6 sm:p-8 rounded-lg shadow">
+<h2 class="text-2xl font-semibold text-gray-700 mb-4">Contact Us</h2>
+<p class="text-gray-600 mb-4">
+If you have any questions or need further assistance, please feel free to reach out.
+</p>
+<form>
+<div class="mb-4">
+<label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+<input type="text" id="name" name="name" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Your Name">
+</div>
+<div class="mb-4">
+<label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+<input type="email" id="email" name="email" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="you@example.com">
+</div>
+<div class="mb-4">
+<label for="message" class="block text-sm font-medium text-gray-700">Message</label>
+<textarea id="message" name="message" rows="4" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="Your message..."></textarea>
+</div>
+<div>
+<button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+Send Message
+</button>
+</div>
+</form>
+</div>
+
+</main>
+
+<footer class="bg-white border-t border-gray-200 mt-12">
+<div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center text-gray-500">
+<p>&copy; <span id="currentYear"></span> Meds and Feds. All rights reserved.</p>
+<p class="text-sm">
+<a href="#" class="hover:text-blue-500">Privacy Policy</a> |
+<a href="#" class="hover:text-blue-500">Terms of Service</a>
+</p>
+</div>
+</footer>
+
+<script>
+// JavaScript for Tab Functionality
+const tabs = document.querySelectorAll('nav button[id^="tab-"]');
+const contentSections = document.querySelectorAll('main div[id^="content-"]');
+
+tabs.forEach(tab => {
+tab.addEventListener('click', () => {
+// Deactivate all tabs and hide all content
+tabs.forEach(t => {
+t.classList.remove('tab-active');
+t.classList.add('tab-inactive');
+});
+contentSections.forEach(section => {
+section.classList.add('hidden');
+});
+
+// Activate clicked tab
+tab.classList.add('tab-active');
+tab.classList.remove('tab-inactive');
+
+// Show corresponding content
+const contentId = 'content-' + tab.id.substring(4); // e.g., tab-welcome -> content-welcome
+const activeContent = document.getElementById(contentId);
+if (activeContent) {
+activeContent.classList.remove('hidden');
+}
+});
+});
+
+// Set current year in footer
+document.getElementById('currentYear').textContent = new Date().getFullYear();
+</script>
+
+</body>
+</html>
