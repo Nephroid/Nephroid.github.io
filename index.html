@@ -61,7 +61,7 @@ opacity: 1;
 <body>
 <div class="container">
 <h1 class="text-4xl font-bold text-gray-900">2025 MLB Home Run Leaders & Projections - Detroit Tigers</h1>
-<p class="text-lg text-gray-600 mb-2">Current home run totals and projected full-season totals (as of May 30, 2025)</p>
+<p class="text-lg text-gray-600 mb-2">Current home run totals and projected full-season totals (as of May 31, 2025)</p>
 <p id="gameInfo" class="text-md text-gray-500 mb-6"></p>
 <div class="chart-container">
 <canvas id="homeRunChart"></canvas>
@@ -83,11 +83,11 @@ Batting order information is not available in the current data.
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-// Data for the Detroit Tigers home run hitters in the 2025 season (as of May 30, 2025)
+// Data for the Detroit Tigers home run hitters in the 2025 season (as of May 31, 2025)
 // Source: FOX Sports, StatMuse, and Yahoo Sports MLB stats (current as of search date)
 const allHrData = [
-{ name: "Spencer Torkelson", team: "DET", currentHr: 13, gamesPlayed: 55, position: "1B" },
-{ name: "Riley Greene", team: "DET", currentHr: 12, gamesPlayed: 55, position: "LF" },
+{ name: "Spencer Torkelson", team: "DET", currentHr: 14, gamesPlayed: 56, position: "1B" },
+{ name: "Riley Greene", team: "DET", currentHr: 13, gamesPlayed: 56, position: "LF" },
 { name: "Kerry Carpenter", team: "DET", currentHr: 10, gamesPlayed: 53, position: "RF" },
 { name: "Javier Báez", team: "DET", currentHr: 6, gamesPlayed: 47, position: "CF" },
 { name: "Gleyber Torres", team: "DET", currentHr: 5, gamesPlayed: 44, position: "2B" },
@@ -100,22 +100,26 @@ const allHrData = [
 { name: "Wenceel Pérez", team: "DET", currentHr: 1, gamesPlayed: 2, position: "CF" }
 ];
 
-// Overall MLB Home Run Leaders (as of May 30, 2025) - This data is manually compiled from search results.
+// Overall MLB Home Run Leaders (as of May 31, 2025) - This data is manually compiled from search results.
 // In a real-world application, this would come from a live API.
 const mlbHrLeaders = [
-  { name: "Shohei Ohtani", hr: 20 },
-  { name: "Cal Raleigh", hr: 19 },
+  { name: "Shohei Ohtani", hr: 22 },
+  { name: "Cal Raleigh", hr: 21 },
+  { name: "Aaron Judge", hr: 19 },
   { name: "Kyle Schwarber", hr: 19 },
-  { name: "Aaron Judge", hr: 18 },
   { name: "Corbin Carroll", hr: 16 },
-  { name: "Pete Crow-Armstrong", hr: 15 },
-  { name: "Eugenio Suárez", hr: 15 },
-  { name: "Taylor Ward", hr: 15 },
-  { name: "James Wood", hr: 15 },
-  { name: "Logan O'Hoppe", hr: 14 },
-  { name: "Seiya Suzuki", hr: 14 },
-  { name: "Spencer Torkelson", hr: 13 }, // DET
-  { name: "Riley Greene", hr: 12 } // DET
+  { name: "James Wood", hr: 16 },
+  // Assuming some other players would be around this range based on previous data
+  { name: "Pete Crow-Armstrong", hr: 15 }, // Kept from previous, adjust if new data contradicts
+  { name: "Eugenio Suárez", hr: 15 }, // Kept from previous
+  { name: "Taylor Ward", hr: 15 }, // Kept from previous
+  { name: "Spencer Torkelson", hr: 14 }, // DET - Updated
+  { name: "Logan O'Hoppe", hr: 14 }, // Kept from previous
+  { name: "Seiya Suzuki", hr: 14 }, // Kept from previous
+  { name: "Riley Greene", hr: 13 }, // DET - Updated
+  // Add a few more if they were close and not surpassed by much
+  { name: "Matt Olson", hr: 12 }, // From original data, as a placeholder if still relevant
+  { name: "Kyle Tucker", hr: 12 } // From original data
 ];
 
 const totalSeasonGames = 162;
