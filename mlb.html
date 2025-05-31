@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>2025 MLB Home Run Leaders & Projections - Detroit Tigers (with Position & MLB Percentile)</title>
+<title>2025 MLB Home Run Leaders & Projections - All Players (with Position)</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
 body {
@@ -60,23 +60,18 @@ opacity: 1;
 </head>
 <body>
 <div class="container">
-<h1 class="text-4xl font-bold text-gray-900">2025 MLB Home Run Leaders & Projections - Detroit Tigers</h1>
+<h1 class="text-4xl font-bold text-gray-900">2025 MLB Home Run Leaders & Projections - All MLB Players</h1>
 <p class="text-lg text-gray-600 mb-2">Current home run totals and projected full-season totals (as of May 31, 2025)</p>
 <p id="gameInfo" class="text-md text-gray-500 mb-6"></p>
 <div class="chart-container">
 <canvas id="homeRunChart"></canvas>
 </div>
 <div class="mt-8 text-left">
-<h2 class="text-2xl font-semibold text-gray-800 mb-4">Hitters (Detroit Tigers, played in at least 70% of games to date):</h2>
+<h2 class="text-2xl font-semibold text-gray-800 mb-4">MLB Home Run Leaders:</h2>
 <ul id="playerList" class="list-disc list-inside text-gray-700">
 </ul>
 <p class="text-sm text-gray-500 mt-4">
-*Projections are based on current home run pace and a 162-game regular season. For players with fewer than 10 games played,
-the projected total is capped at their current home runs due to limited data, as projections can be highly unreliable.
-This chart only includes players who have played in at least 70% of the Detroit Tigers' games played so far this season.
-The black tick mark on each bar indicates the projected home run total at the halfway point of the season (81 games).
-Actual results may vary due to performance fluctuations, injuries, and other factors.
-Batting order information is not available in the current data.
+*Projections (if shown) are based on current home run pace and a 162-game regular season. For players with insufficient games played data (less than 10 games or data unavailable), the projected total is capped at their current home runs. The black tick mark on each bar (if shown) indicates the projected home run total at the halfway point of the season (81 games). Actual results may vary due to performance fluctuations, injuries, and other factors. Detailed position and games played may not be available for all players in this league-wide view. Batting order information is not available.
 </p>
 </div>
 </div>
@@ -126,23 +121,17 @@ const totalSeasonGames = 162;
 const minGamesForProjection = 10; // Minimum games played for a rate-based projection
 const midSeasonGames = totalSeasonGames / 2; // Halfway point of the season
 
-// Determine the maximum games played by any Tigers player to set the "current season" benchmark
-const maxGamesPlayedByTigers = Math.max(...allHrData.map(player => player.gamesPlayed));
-const minGamesForCurrent70Percent = Math.ceil(maxGamesPlayedByTigers * 0.70); // 70% of games played by team leader
-
-// Calculate games remaining
-const gamesRemaining = totalSeasonGames - maxGamesPlayedByTigers;
-
 // Update the game info paragraph
-document.getElementById('gameInfo').textContent = `Games played so far: ${maxGamesPlayedByTigers} | Games remaining in season: ${gamesRemaining}`;
+document.getElementById('gameInfo').textContent = "Displaying league-wide MLB home run data. Projections are based on a 162-game season.";
 
 
 // Filter data to only include Detroit Tigers players who have played at least 70% of the current season's games
-const hrData = allHrData.filter(player => player.gamesPlayed >= minGamesForCurrent70Percent);
+// const hrData = allHrData.filter(player => player.gamesPlayed >= minGamesForCurrent70Percent);
+const hrData = mlbHrLeaders.map(player => ({ ...player, currentHr: player.hr, name: player.name, position: player.position || 'N/A', gamesPlayed: player.gamesPlayed || 0 }));
 
 // Calculate projected home runs for each player based on their individual games played
 hrData.forEach(player => {
-if (player.gamesPlayed >= minGamesForProjection) {
+if (player.gamesPlayed >= minGamesForProjection && player.gamesPlayed > 0) {
 player.projectedHr = Math.round((player.currentHr / player.gamesPlayed) * totalSeasonGames);
 player.midSeasonProjectedHr = Math.round((player.currentHr / player.gamesPlayed) * midSeasonGames);
 } else {
