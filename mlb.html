@@ -71,7 +71,7 @@ opacity: 1;
 <ul id="playerList" class="list-disc list-inside text-gray-700">
 </ul>
 <p class="text-sm text-gray-500 mt-4">
-*Projections (if shown) are based on current home run pace and a 162-game regular season. For players with insufficient games played data (less than 10 games or data unavailable), the projected total is capped at their current home runs. The black tick mark on each bar (if shown) indicates the projected home run total at the halfway point of the season (81 games). Actual results may vary due to performance fluctuations, injuries, and other factors. Detailed position and games played may not be available for all players in this league-wide view. Batting order information is not available.
+*Actual results may vary due to performance fluctuations, injuries, and other factors. Detailed position and games played may not be available for all players in this league-wide view. Batting order information is not available. The term '162-game season' is used as a general reference point.
 </p>
 </div>
 </div>
@@ -118,8 +118,6 @@ const mlbHrLeaders = [
 ];
 
 const totalSeasonGames = 162;
-const minGamesForProjection = 10; // Minimum games played for a rate-based projection
-const midSeasonGames = totalSeasonGames / 2; // Halfway point of the season
 
 // Update the game info paragraph
 document.getElementById('gameInfo').textContent = "Displaying league-wide MLB home run data. Projections are based on a 162-game season.";
@@ -129,20 +127,6 @@ document.getElementById('gameInfo').textContent = "Displaying league-wide MLB ho
 // const hrData = allHrData.filter(player => player.gamesPlayed >= minGamesForCurrent70Percent);
 const hrData = mlbHrLeaders.map(player => ({ ...player, currentHr: player.hr, name: player.name, position: player.position || 'N/A', gamesPlayed: player.gamesPlayed || 0 }));
 
-// Calculate projected home runs for each player based on their individual games played
-hrData.forEach(player => {
-if (player.gamesPlayed >= minGamesForProjection && player.gamesPlayed > 0) {
-player.projectedHr = Math.round((player.currentHr / player.gamesPlayed) * totalSeasonGames);
-player.midSeasonProjectedHr = Math.round((player.currentHr / player.gamesPlayed) * midSeasonGames);
-} else {
-// For players with very few games, set projected HR to current HR
-// and add a flag to indicate unreliable projection
-player.projectedHr = player.currentHr;
-player.midSeasonProjectedHr = player.currentHr; // Mid-season also capped at current for unreliable
-player.unreliableProjection = true;
-}
-});
-
 // Sort data by projected total home runs in descending order for better visual grouping
 hrData.sort((a, b) => b.projectedHr - a.projectedHr);
 
@@ -150,13 +134,6 @@ hrData.sort((a, b) => b.projectedHr - a.projectedHr);
 // Changed label formatting to put percentile on a new line
 const labels = hrData.map(player => `${player.name} (${player.position})`);
 const currentHomeRuns = hrData.map(player => player.currentHr);
-const additionalProjectedHomeRuns = hrData.map(player => Math.max(0, player.projectedHr - player.currentHr)); // Ensure non-negative
-
-// Prepare data for the mid-season markers
-const midSeasonMarkers = hrData.map((player, index) => ({
-x: player.midSeasonProjectedHr,
-y: index // Y-axis index for the player
-}));
 
 // Get the canvas element
 const ctx = document.getElementById('homeRunChart').getContext('2d');
@@ -179,33 +156,6 @@ backgroundColor: 'rgba(255, 159, 64, 0.8)', // Orange for current
 borderColor: 'rgba(255, 159, 64, 1)',
 borderWidth: 1,
 borderRadius: 8,
-},
-{
-label: 'Additional Projected Home Runs',
-data: additionalProjectedHomeRuns,
-backgroundColor: 'rgba(255, 235, 59, 0.8)', // Yellow for projected addition
-borderColor: 'rgba(255, 235, 59, 1)',
-borderWidth: 1,
-borderRadius: 8,
-},
-{
-label: 'Mid-Season Projection',
-data: midSeasonMarkers,
-type: 'scatter', // Overlay as a scatter plot
-backgroundColor: 'black',
-borderColor: 'black',
-pointStyle: 'line', // Make it a line/tick
-radius: 8, // Length of the line
-borderWidth: 2, // Thickness of the line
-rotation: 90, // Rotate to make it vertical
-showLine: false, // Do not connect points with a line
-tooltip: {
-callbacks: {
-label: function(context) {
-return `Mid-Season Projected: ${context.raw.x} HR`;
-}
-}
-}
 }
 ]
 },
@@ -230,16 +180,8 @@ const fullLabel = context[0].label;
 return fullLabel.split('\n')[0]; // Get only the first line
 },
 label: function(context) {
-let label = context.dataset.label || '';
-if (label === 'Current Home Runs') {
-return `Current: ${context.raw} HR`;
-} else if (label === 'Additional Projected Home Runs') {
-const playerIndex = context.dataIndex;
-const current = currentHomeRuns[playerIndex];
-const projected = current + context.raw;
-return `Projected Total: ${projected} HR (Additional: ${context.raw})`;
-}
-return '';
+  let datasetLabel = context.dataset.label || 'HR'; // Fallback label
+  return `${datasetLabel}: ${context.raw}`;
 }
 }
 }
@@ -247,7 +189,7 @@ return '';
 scales: {
 x: {
 beginAtZero: true,
-stacked: true, // Crucial for stacking bars
+stacked: false, // Crucial for stacking bars
 title: {
 display: true,
 text: 'Home Runs',
@@ -261,7 +203,7 @@ color: 'rgba(203, 213, 224, 0.5)'
 }
 },
 y: {
-stacked: true, // Crucial for stacking bars
+stacked: false, // Crucial for stacking bars
 title: {
 display: true,
 text: 'Player',
@@ -288,8 +230,7 @@ playerList.appendChild(noDataMessage);
 } else {
 hrData.forEach(player => {
 const listItem = document.createElement('li');
-listItem.textContent = `${player.name} (${player.position}): Current HR: ${player.currentHr}, Projected Season HR: ${player.projectedHr}, Mid-Season Projected HR: ${player.midSeasonProjectedHr}` +
-(player.unreliableProjection ? ' (Projection based on limited games played)' : '');
+listItem.textContent = `${player.name} (${player.position}): Current HR: ${player.currentHr}`;
 playerList.appendChild(listItem);
 });
 }
