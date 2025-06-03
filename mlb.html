@@ -61,7 +61,7 @@ opacity: 1;
 <body>
 <div class="container">
 <h1 class="text-4xl font-bold text-gray-900">2025 MLB Home Run Leaders & Projections - All MLB Players</h1>
-<p class="text-lg text-gray-600 mb-2">Current home run totals and projected full-season totals (as of May 31, 2025)</p>
+<p class="text-lg text-gray-600 mb-2">Current home run totals and projected full-season totals (as of June 03, 2025)</p>
 <p id="gameInfo" class="text-md text-gray-500 mb-6"></p>
 <div class="chart-container">
 <canvas id="homeRunChart"></canvas>
@@ -78,43 +78,176 @@ opacity: 1;
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-// Data for the Detroit Tigers home run hitters in the 2025 season (as of May 31, 2025)
+// Data for the Detroit Tigers home run hitters in the 2025 season (as of June 03, 2025)
 // Source: FOX Sports, StatMuse, and Yahoo Sports MLB stats (current as of search date)
 const allHrData = [
-{ name: "Spencer Torkelson", team: "DET", currentHr: 14, gamesPlayed: 56, position: "1B" },
-{ name: "Riley Greene", team: "DET", currentHr: 13, gamesPlayed: 56, position: "LF" },
-{ name: "Kerry Carpenter", team: "DET", currentHr: 10, gamesPlayed: 53, position: "RF" },
-{ name: "Javier Báez", team: "DET", currentHr: 6, gamesPlayed: 47, position: "CF" },
-{ name: "Gleyber Torres", team: "DET", currentHr: 5, gamesPlayed: 44, position: "2B" },
-{ name: "Dillon Dingler", team: "DET", currentHr: 4, gamesPlayed: 41, position: "C" },
-{ name: "Colt Keith", team: "DET", currentHr: 4, gamesPlayed: 50, position: "2B" },
-{ name: "Trey Sweeney", team: "DET", currentHr: 4, gamesPlayed: 55, position: "SS" },
-{ name: "Zach McKinstry", team: "DET", currentHr: 3, gamesPlayed: 51, position: "RF" },
-{ name: "Andy Ibáñez", team: "DET", currentHr: 2, gamesPlayed: 40, position: "3B" },
-{ name: "Justyn-Henry Malloy", team: "DET", currentHr: 1, gamesPlayed: 44, position: "RF" },
-{ name: "Wenceel Pérez", team: "DET", currentHr: 1, gamesPlayed: 2, position: "CF" }
+  {
+    "rank": 10,
+    "name": "Spencer Torkelson",
+    "team": "DET",
+    "hr": 14
+  },
+  {
+    "rank": 13,
+    "name": "Riley Greene",
+    "team": "DET",
+    "hr": 13
+  }
 ];
 
-// Overall MLB Home Run Leaders (as of May 31, 2025) - This data is manually compiled from search results.
+// Overall MLB Home Run Leaders (as of June 03, 2025) - This data is manually compiled from search results.
 // In a real-world application, this would come from a live API.
 const mlbHrLeaders = [
-  { name: "Shohei Ohtani", hr: 22 },
-  { name: "Cal Raleigh", hr: 21 },
-  { name: "Aaron Judge", hr: 19 },
-  { name: "Kyle Schwarber", hr: 19 },
-  { name: "Corbin Carroll", hr: 16 },
-  { name: "James Wood", hr: 16 },
-  // Assuming some other players would be around this range based on previous data
-  { name: "Pete Crow-Armstrong", hr: 15 }, // Kept from previous, adjust if new data contradicts
-  { name: "Eugenio Suárez", hr: 15 }, // Kept from previous
-  { name: "Taylor Ward", hr: 15 }, // Kept from previous
-  { name: "Spencer Torkelson", hr: 14 }, // DET - Updated
-  { name: "Logan O'Hoppe", hr: 14 }, // Kept from previous
-  { name: "Seiya Suzuki", hr: 14 }, // Kept from previous
-  { name: "Riley Greene", hr: 13 }, // DET - Updated
-  // Add a few more if they were close and not surpassed by much
-  { name: "Matt Olson", hr: 12 }, // From original data, as a placeholder if still relevant
-  { name: "Kyle Tucker", hr: 12 } // From original data
+  {
+    "rank": 1,
+    "name": "Cal Raleigh",
+    "team": "SEA",
+    "hr": 23
+  },
+  {
+    "rank": 2,
+    "name": "Shohei Ohtani",
+    "team": "LAD",
+    "hr": 22
+  },
+  {
+    "rank": 3,
+    "name": "Aaron Judge",
+    "team": "NYY",
+    "hr": 21
+  },
+  {
+    "rank": 4,
+    "name": "Kyle Schwarber",
+    "team": "PHI",
+    "hr": 19
+  },
+  {
+    "rank": 5,
+    "name": "Corbin Carroll",
+    "team": "AZ",
+    "hr": 16
+  },
+  {
+    "rank": 5,
+    "name": "Eugenio Suárez",
+    "team": "AZ",
+    "hr": 16
+  },
+  {
+    "rank": 5,
+    "name": "James Wood",
+    "team": "WSH",
+    "hr": 16
+  },
+  {
+    "rank": 5,
+    "name": "Taylor Ward",
+    "team": "LAA",
+    "hr": 16
+  },
+  {
+    "rank": 9,
+    "name": "Pete Crow-Armstrong",
+    "team": "CHC",
+    "hr": 15
+  },
+  {
+    "rank": 10,
+    "name": "Logan O'Hoppe",
+    "team": "LAA",
+    "hr": 14
+  },
+  {
+    "rank": 10,
+    "name": "Seiya Suzuki",
+    "team": "CHC",
+    "hr": 14
+  },
+  {
+    "rank": 10,
+    "name": "Spencer Torkelson",
+    "team": "DET",
+    "hr": 14
+  },
+  {
+    "rank": 13,
+    "name": "Brent Rooker",
+    "team": "ATH",
+    "hr": 13
+  },
+  {
+    "rank": 13,
+    "name": "Fernando Tatis Jr.",
+    "team": "SD",
+    "hr": 13
+  },
+  {
+    "rank": 13,
+    "name": "Francisco Lindor",
+    "team": "NYM",
+    "hr": 13
+  },
+  {
+    "rank": 13,
+    "name": "Junior Caminero",
+    "team": "TB",
+    "hr": 13
+  },
+  {
+    "rank": 13,
+    "name": "Riley Greene",
+    "team": "DET",
+    "hr": 13
+  },
+  {
+    "rank": 13,
+    "name": "Trent Grisham",
+    "team": "NYY",
+    "hr": 13
+  },
+  {
+    "rank": 13,
+    "name": "Wilyer Abreu",
+    "team": "BOS",
+    "hr": 13
+  },
+  {
+    "rank": 20,
+    "name": "Ben Rice",
+    "team": "NYY",
+    "hr": 12
+  },
+  {
+    "rank": 20,
+    "name": "Elly De La Cruz",
+    "team": "CIN",
+    "hr": 12
+  },
+  {
+    "rank": 20,
+    "name": "Matt Olson",
+    "team": "ATL",
+    "hr": 12
+  },
+  {
+    "rank": 20,
+    "name": "Oneil Cruz",
+    "team": "PIT",
+    "hr": 12
+  },
+  {
+    "rank": 20,
+    "name": "Pete Alonso",
+    "team": "NYM",
+    "hr": 12
+  },
+  {
+    "rank": 20,
+    "name": "Rafael Devers",
+    "team": "BOS",
+    "hr": 12
+  }
 ];
 
 const totalSeasonGames = 162;
